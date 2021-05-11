@@ -144,6 +144,12 @@ public class PeerConnection {
     @CalledByNative("Observer") void onAddTrack(RtpReceiver receiver, MediaStream[] mediaStreams);
 
     /**
+     * Triggered when a previously added remote track is removed by the remote
+     * peer, as a result of setRemoteDescription.
+     */
+    @CalledByNative("Observer") void onRemoveTrack(RtpReceiver receiver);
+
+    /**
      * Triggered when the signaling from SetRemoteDescription indicates that a transceiver
      * will be receiving media from a remote endpoint. This is only called if UNIFIED_PLAN
      * semantics are specified. The transceiver will be disposed automatically.
