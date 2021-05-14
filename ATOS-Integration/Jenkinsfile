@@ -13,7 +13,7 @@ pipeline {
                 sh 'apt update'
                 sh 'apt install -y git curl wget'
                 sh 'git clone https://chromium.googlesource.com/chromium/tools/depot_tools.git'
-                sh 'export PATH=$PATH:$PWD/depot_tools'
+                sh 'export PATH="$PATH:$PWD/depot_tools"'
                 sh 'fetch --nohooks webrtc_android'
                 sh 'gsync sync'
                 sh 'cd src'
