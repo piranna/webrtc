@@ -1,7 +1,7 @@
 pipeline {
     agent {
         docker {
-            image 'ubuntu:21.04'
+            image 'ubuntu:focal-20210325'
             args '-v $HOME/workspace/helios-webrtc:/helios-webrtc -w /helios-webrtc'
             reuseNode true 
         }
