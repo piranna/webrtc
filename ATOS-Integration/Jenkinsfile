@@ -3,7 +3,7 @@ pipeline {
         dockerfile {
             dir { 'ATOS-Integration/Dockerfile.builder' }
         }
-
+    }
     stages {
         stage('Import dependencies') {
             steps {
