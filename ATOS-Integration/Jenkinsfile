@@ -1,9 +1,6 @@
 pipeline {
-    agent {
-        dockerfile {
-            dir { 'ATOS-Integration/Dockerfile.builder' }
-        }
-    }
+    agent { dockerfile { dir 'ATOS-Integration/Dockerfile.builder' } }`.
+
     stages {
         stage('Import dependencies') {
             steps {
