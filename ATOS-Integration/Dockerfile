@@ -11,4 +11,5 @@ RUN apt install -y lsb-core
 # Download 3rd dependencies
 WORKDIR /dependencies
 RUN git clone https://chromium.googlesource.com/chromium/tools/depot_tools.git
+RUN chmod 777 -R /dependencies
 ENV PATH="$PATH:/dependencies/depot_tools"
