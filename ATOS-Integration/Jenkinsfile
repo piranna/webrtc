@@ -2,26 +2,15 @@ pipeline {
     agent any
 
     stages {
-        stage('Import GIT') {
-            steps {
-                git branch: 'master',
-                    credentialsId: 'e77327d5-202c-4170-bae8-ecf64ff16eff',
-                    url: 'https://scm.atosresearch.eu/ari/helios_group/storage.git'
-            }
-        }
-        
         stage('Build') {
             agent {
                 docker {
-                    image 'gradle'
+                    image 'ubuntu'
                     reuseNode true // this enables to use the current workspace inside docker
                 }
             }
             steps {
                 sh 'ls -lha'
-                sh 'env'
-                sh 'pwd'
-        		sh './gradlew clean assemble'
             }
         }
     }
