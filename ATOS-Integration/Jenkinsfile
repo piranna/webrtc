@@ -10,7 +10,17 @@ pipeline {
                 }
             }
             steps {
-                sh 'ls -lha'
+                sh 'apt get update'
+                sh 'apt get install -y git curl wget'
+                sh 'git clone https://chromium.googlesource.com/chromium/tools/depot_tools.git'
+                sh 'export PATH=$PATH:$PWD/depot_tools'
+                sh 'fetch --nohooks webrtc_android'
+                sh 'gsync sync'
+                sh 'cd src'
+                sh './build/install-build-deps.sh'
+                sh 'gclient revert'
+                sh 'gclient sync'
+                sh 'tools_webrtc/android/build_aar.py'
             }
         }
     }
