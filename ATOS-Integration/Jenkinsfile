@@ -1,15 +1,15 @@
 pipeline {
-    agent any
-
+    agent {
+        docker {
+            image 'ubuntu:21.04'
+            args '-v $HOME/workspace/helios-webrtc:/helios-webrtc -w /helios-webrtc'
+            reuseNode true 
+        }
+    }
     stages {
-        stage('Build') {
-            agent {
-                docker {
-                    image 'ubuntu:21.04'
-                    reuseNode true // this enables to use the current workspace inside docker
-                }
-            }
+        stage('Import Dependencies') {
             steps {
+                sh 'ls'
                 sh 'apt update'
                 sh 'apt install -y git curl wget'
                 sh 'git clone https://chromium.googlesource.com/chromium/tools/depot_tools.git'
@@ -20,6 +20,11 @@ pipeline {
                 sh './build/install-build-deps.sh'
                 sh 'gclient revert'
                 sh 'gclient sync'
+            }
+        }
+        stage('Build') {
+            stage {
+                sh 'cd src'
                 sh 'tools_webrtc/android/build_aar.py'
             }
         }
