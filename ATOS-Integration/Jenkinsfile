@@ -23,7 +23,7 @@ pipeline {
             }
         }
         stage('Build') {
-            stage {
+            steps {
                 sh 'cd src'
                 sh 'tools_webrtc/android/build_aar.py'
             }
