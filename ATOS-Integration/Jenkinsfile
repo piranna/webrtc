@@ -5,7 +5,7 @@ pipeline {
         stage('Build') {
             agent {
                 docker {
-                    image 'ubuntu'
+                    image 'ubuntu:21.04'
                     reuseNode true // this enables to use the current workspace inside docker
                 }
             }
