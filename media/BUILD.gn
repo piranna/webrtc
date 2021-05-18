@@ -81,6 +81,7 @@ rtc_library("rtc_media_base") {
     "../api/crypto:frame_decryptor_interface",
     "../api/crypto:frame_encryptor_interface",
     "../api/crypto:options",
+    "../api/transport:datagram_transport_interface",
     "../api/transport:stun_types",
     "../api/transport:webrtc_key_value_config",
     "../api/transport/rtp:rtp_source",
@@ -106,6 +107,8 @@ rtc_library("rtc_media_base") {
     "../rtc_base/synchronization:mutex",
     "../rtc_base/system:file_wrapper",
     "../rtc_base/system:rtc_export",
+    "../rtc_base/task_utils:pending_task_safety_flag",
+    "../rtc_base/task_utils:to_queued_task",
     "../rtc_base/third_party/sigslot",
     "../system_wrappers:field_trial",
   ]
@@ -379,6 +382,7 @@ rtc_library("rtc_media_engine_defaults") {
 rtc_source_set("rtc_data_sctp_transport_internal") {
   sources = [ "sctp/sctp_transport_internal.h" ]
   deps = [
+    "../api/transport:datagram_transport_interface",
     "../media:rtc_media_base",
     "../p2p:rtc_p2p",
     "../rtc_base:rtc_base_approved",

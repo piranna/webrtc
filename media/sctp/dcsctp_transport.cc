@@ -11,6 +11,7 @@
 #include "media/sctp/dcsctp_transport.h"
 
 #include <cstdint>
+#include <limits>
 #include <utility>
 #include <vector>
 
@@ -31,7 +32,6 @@ namespace webrtc {
 namespace {
 
 enum class WebrtcPPID : dcsctp::PPID::UnderlyingType {
-  kNone = 0,  // No protocol is specified.
   // https://www.rfc-editor.org/rfc/rfc8832.html#section-8.1
   kDCEP = 50,
   // https://www.rfc-editor.org/rfc/rfc8831.html#section-8
@@ -43,34 +43,29 @@ enum class WebrtcPPID : dcsctp::PPID::UnderlyingType {
   kBinaryEmpty = 57,
 };
 
-WebrtcPPID ToPPID(cricket::DataMessageType message_type, size_t size) {
+WebrtcPPID ToPPID(DataMessageType message_type, size_t size) {
   switch (message_type) {
-    case cricket::DMT_CONTROL:
+    case webrtc::DataMessageType::kControl:
       return WebrtcPPID::kDCEP;
-    case cricket::DMT_TEXT:
+    case webrtc::DataMessageType::kText:
       return size > 0 ? WebrtcPPID::kString : WebrtcPPID::kStringEmpty;
-    case cricket::DMT_BINARY:
+    case webrtc::DataMessageType::kBinary:
       return size > 0 ? WebrtcPPID::kBinary : WebrtcPPID::kBinaryEmpty;
-    default:
-      RTC_NOTREACHED();
   }
-  return WebrtcPPID::kNone;
 }
 
-absl::optional<cricket::DataMessageType> ToDataMessageType(dcsctp::PPID ppid) {
+absl::optional<DataMessageType> ToDataMessageType(dcsctp::PPID ppid) {
   switch (static_cast<WebrtcPPID>(ppid.value())) {
-    case WebrtcPPID::kNone:
-      return cricket::DMT_NONE;
     case WebrtcPPID::kDCEP:
-      return cricket::DMT_CONTROL;
+      return webrtc::DataMessageType::kControl;
     case WebrtcPPID::kString:
     case WebrtcPPID::kStringPartial:
     case WebrtcPPID::kStringEmpty:
-      return cricket::DMT_TEXT;
+      return webrtc::DataMessageType::kText;
     case WebrtcPPID::kBinary:
     case WebrtcPPID::kBinaryPartial:
     case WebrtcPPID::kBinaryEmpty:
-      return cricket::DMT_BINARY;
+      return webrtc::DataMessageType::kBinary;
   }
   return absl::nullopt;
 }
@@ -176,13 +171,14 @@ bool DcSctpTransport::ResetStream(int sid) {
   return true;
 }
 
-bool DcSctpTransport::SendData(const cricket::SendDataParams& params,
+bool DcSctpTransport::SendData(int sid,
+                               const SendDataParams& params,
                                const rtc::CopyOnWriteBuffer& payload,
                                cricket::SendDataResult* result) {
   RTC_DCHECK_RUN_ON(network_thread_);
 
-  RTC_LOG(LS_VERBOSE) << debug_name_ << "->SendData(sid=" << params.sid
-                      << ", type=" << params.type
+  RTC_LOG(LS_VERBOSE) << debug_name_ << "->SendData(sid=" << sid
+                      << ", type=" << static_cast<int>(params.type)
                       << ", length=" << payload.size() << ").";
 
   if (!socket_) {
@@ -215,17 +211,22 @@ bool DcSctpTransport::SendData(const cricket::SendDataParams& params,
   }
 
   dcsctp::DcSctpMessage message(
-      dcsctp::StreamID(static_cast<uint16_t>(params.sid)),
+      dcsctp::StreamID(static_cast<uint16_t>(sid)),
       dcsctp::PPID(static_cast<uint16_t>(ToPPID(params.type, payload.size()))),
       std::move(message_payload));
 
   dcsctp::SendOptions send_options;
   send_options.unordered = dcsctp::IsUnordered(!params.ordered);
-  if (params.max_rtx_ms > 0)
-    send_options.lifetime = dcsctp::DurationMs(params.max_rtx_ms);
-  if (params.max_rtx_count > 0)
-    send_options.max_retransmissions =
-        static_cast<size_t>(params.max_rtx_count);
+  if (params.max_rtx_ms.has_value()) {
+    RTC_DCHECK(*params.max_rtx_ms >= 0 &&
+               *params.max_rtx_ms <= std::numeric_limits<uint16_t>::max());
+    send_options.lifetime = dcsctp::DurationMs(*params.max_rtx_ms);
+  }
+  if (params.max_rtx_count.has_value()) {
+    RTC_DCHECK(*params.max_rtx_count >= 0 &&
+               *params.max_rtx_count <= std::numeric_limits<uint16_t>::max());
+    send_options.max_retransmissions = *params.max_rtx_count;
+  }
 
   auto error = socket_->Send(std::move(message), send_options);
   switch (error) {
