@@ -1,6 +1,7 @@
 *   [Home](/g3doc/index.md)
 *   How to contribute
     *   Code
+        * [Style guide](/g3doc/style-guide.md)
     *   [Documentation](/g3doc/how_to_write_documentation.md)
 *   [Public C++ API](/api/g3doc/index.md)
     *   [Threading](/api/g3doc/threading_design.md)
@@ -9,7 +10,7 @@
         *   [ICE](/p2p/g3doc/ice.md)
         *   STUN
         *   TURN
-        *   DTLS
+        *   [DTLS](/pc/g3doc/dtls_transport.md)
         *   [SCTP](/pc/g3doc/sctp_transport.md)
         *   [Pacing buffer](/modules/pacing/g3doc/index.md)
     *   Congestion control and bandwidth estimation
