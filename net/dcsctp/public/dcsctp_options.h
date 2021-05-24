@@ -95,8 +95,9 @@ struct DcSctpOptions {
   // Maximum RTO value.
   DurationMs rto_max = DurationMs(800);
 
-  // Minimum RTO value.
-  DurationMs rto_min = DurationMs(120);
+  // Minimum RTO value. This must be larger than an expected peer delayed ack
+  // timeout.
+  DurationMs rto_min = DurationMs(220);
 
   // T1-init timeout.
   DurationMs t1_init_timeout = DurationMs(1000);
@@ -115,7 +116,7 @@ struct DcSctpOptions {
   DurationMs delayed_ack_max_timeout = DurationMs(200);
 
   // Do slow start as TCP - double cwnd instead of increasing it by MTU.
-  bool slow_start_tcp_style = true;
+  bool slow_start_tcp_style = false;
 
   // The initial congestion window size, in number of MTUs.
   // See https://tools.ietf.org/html/rfc4960#section-7.2.1 which defaults at ~3
