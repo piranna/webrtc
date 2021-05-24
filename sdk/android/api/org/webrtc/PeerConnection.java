@@ -147,7 +147,7 @@ public class PeerConnection {
      * Triggered when a previously added remote track is removed by the remote
      * peer, as a result of setRemoteDescription.
      */
-    @CalledByNative("Observer") void onRemoveTrack(RtpReceiver receiver);
+    @CalledByNative("Observer") default void onRemoveTrack(RtpReceiver receiver){};
 
     /**
      * Triggered when the signaling from SetRemoteDescription indicates that a transceiver
