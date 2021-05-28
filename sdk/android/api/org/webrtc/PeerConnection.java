@@ -141,7 +141,8 @@ public class PeerConnection {
      * Triggered when a new track is signaled by the remote peer, as a result of
      * setRemoteDescription.
      */
-    @CalledByNative("Observer") void onAddTrack(RtpReceiver receiver, MediaStream[] mediaStreams);
+    @CalledByNative("Observer")
+    default void onAddTrack(RtpReceiver receiver, MediaStream[] mediaStreams){};
 
     /**
      * Triggered when a previously added remote track is removed by the remote
