@@ -72,8 +72,8 @@ constexpr int kDefaultMaxPlaybackRate = 48000;
 
 // These two lists must be sorted from low to high
 #if WEBRTC_OPUS_SUPPORT_120MS_PTIME
-constexpr std::array kANASupportedFrameLengths = {20, 40, 60, 120};
-constexpr std::array kOpusSupportedFrameLengths = {10, 20, 40, 60, 120};
+constexpr std::array kANASupportedFrameLengths = {20, 40, 60, 80, 120};
+constexpr std::array kOpusSupportedFrameLengths = {10, 20, 40, 60, 80, 120};
 #else
 constexpr std::array kANASupportedFrameLengths = {20, 40, 60};
 constexpr std::array kOpusSupportedFrameLengths = {10, 20, 40, 60};
