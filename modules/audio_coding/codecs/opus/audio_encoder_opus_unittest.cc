@@ -616,8 +616,11 @@ TEST(AudioEncoderOpusTest, TestConfigFromParams) {
   EXPECT_EQ(40, config13.frame_size_ms);
 
   constexpr int kMinSupportedFrameLength = 10;
-  constexpr int kMaxSupportedFrameLength =
-      WEBRTC_OPUS_SUPPORT_120MS_PTIME ? 120 : 60;
+#if WEBRTC_OPUS_SUPPORT_120MS_PTIME
+  constexpr int kMaxSupportedFrameLength = 120;
+#else
+  constexpr int kMaxSupportedFrameLength = 60;
+#endif
 
   const auto config14 = CreateConfigWithParameters({{"ptime", "1"}});
   EXPECT_EQ(kMinSupportedFrameLength, config14.frame_size_ms);

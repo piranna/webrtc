@@ -22,8 +22,11 @@ constexpr int kDefaultComplexity = 5;
 constexpr int kDefaultComplexity = 9;
 #endif
 
-constexpr int kDefaultLowRateComplexity =
-    WEBRTC_OPUS_VARIABLE_COMPLEXITY ? 9 : kDefaultComplexity;
+#if WEBRTC_OPUS_VARIABLE_COMPLEXITY
+constexpr int kDefaultLowRateComplexity = 9;
+#else
+constexpr int kDefaultLowRateComplexity = kDefaultComplexity;
+#endif
 
 }  // namespace
 
