@@ -62,7 +62,7 @@ constexpr int kOpusBitrateFbBps = 32000;
 constexpr int kDefaultMaxPlaybackRate = 48000;
 // These two lists must be sorted from low to high
 #if WEBRTC_OPUS_SUPPORT_120MS_PTIME
-constexpr int kOpusSupportedFrameLengths[] = {10, 20, 40, 60, 120};
+constexpr int kOpusSupportedFrameLengths[] = {10, 20, 40, 60, 80, 120};
 #else
 constexpr int kOpusSupportedFrameLengths[] = {10, 20, 40, 60};
 #endif
