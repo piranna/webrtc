@@ -633,7 +633,8 @@ TEST(AudioEncoderOpusTest, TestConfigFromInvalidParams) {
   const SdpAudioFormat format("opus", 48000, 2);
   const auto default_config = *AudioEncoderOpus::SdpToConfig(format);
 #if WEBRTC_OPUS_SUPPORT_120MS_PTIME
-  const std::vector<int> default_supported_frame_lengths_ms({20, 40, 60, 80, 120});
+  const std::vector<int> default_supported_frame_lengths_ms(
+      {20, 40, 60, 80, 120});
 #else
   const std::vector<int> default_supported_frame_lengths_ms({20, 40, 60});
 #endif
